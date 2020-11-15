@@ -11,9 +11,13 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import { connect } from 'react-redux'
 import { logIn } from '../../redux/Actions';
+import Google_maps from '../Maps/Google_maps';
+import '../index.css';
+
+
+
 
 class Auth1 extends Component {
 
@@ -22,15 +26,8 @@ class Auth1 extends Component {
       email: ''
     };
 
-handleChangeEmail = (event,values) => {
-  
 
-    this.setState({
-      email: values
-    }, () => {
-      console.log(this.state.email);
-    });
-}
+    
 handleChange = event => {
   const { name, value } = event.target;
 
@@ -45,6 +42,11 @@ onFormSubmit = (event) => {
     this.props.handleSubmit(this.state);
     this.setState(this.initialState);
 }
+
+handleButtonClick2() {
+  this.props.history.push('/map');
+}
+
 handleButtonClick() 
 {
   console.log(this.state);
@@ -94,7 +96,10 @@ handleButtonClick()
       },
     }));
     const classes = useStyles;
-    const { email, pass } = this.state;
+    const { email, pass} = this.state;
+    
+    
+
     return (
       
       <Container component="main" maxWidth="xs">
@@ -107,23 +112,39 @@ handleButtonClick()
             Войти
         </Typography>
           <form className={classes.form} noValidate>
-          <Autocomplete
-            onChange={this.handleChangeEmail} 
-            id="email"
-            freeSolo
-            options={Emails.map((option) => option.title)}
-            renderInput={(params) => (
-          <TextField {...params} label="Email Addres" margin="normal" variant="outlined" margin="normal" required fullWidth id="email" name="email" value={email} autoFocus type={'text'} onChange={this.handleChange}/>
-          )}
-          />
-          <Autocomplete 
-            id="pass"
-            freeSolo
-            options={Passs.map((option) => option.title)}
-            renderInput={(params) => (
-          <TextField {...params} label="pass" margin="normal" variant="outlined" margin="normal" required fullWidth id="pass" name="pass" value={pass} autoFocus onChange={this.handleChange} type="password"/>
-          )}
-          />
+          <TextField  
+          label="Email Addres" 
+          margin="normal" 
+          variant="outlined" 
+          margin="normal" 
+          required 
+          fullWidth 
+          id="email" 
+          name="email" 
+          value={email} 
+          autoFocus 
+          type={'text'} 
+          onChange={this.handleChange}/>
+          <TextField  
+          label="pass" 
+          margin="normal" 
+          variant="outlined" 
+          margin="normal" 
+          required 
+          fullWidth 
+          id="pass" 
+          name="pass" 
+          value={pass} 
+          autoFocus 
+          onChange={this.handleChange} 
+          type="password"/>
+          
+          <div>
+            <Google_maps
+            
+            onChange={this.handleChange} 
+            />
+          </div>
             
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -137,9 +158,21 @@ handleButtonClick()
               className={classes.submit}
               onClick={this.handleButtonClick.bind(this)}
             >
+             
               
               Вход
           </Button>
+
+          <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={this.handleButtonClick2.bind(this)}
+            >
+              Google_Maps
+              </Button> 
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
@@ -158,20 +191,11 @@ handleButtonClick()
     );
 
   }
+  
 }
 
-const Emails = [
-  { title: 'admin@mail.ru'},
-  { title: 'viktor@mail.ru'}
-  
-];
-const Passs = [
-  { title: 'А'},
-  { title: 'Пороль'},
-  { title: 'Нужно'},
-  { title: 'Знать'}
-  
-];
+
+
 const mapStateToProps = (state) => {
   return {
     logInf: state.auth_reducer.logged
